@@ -103,3 +103,125 @@ CREATE TABLE student_academicRecord (
     workExperience VARCHAR(45),
     FOREIGN KEY (student_id) REFERENCES student(id)
 );
+
+
+
+
+
+CREATE TABLE Student (
+    studentID INT PRIMARY KEY ,
+    firstName VARCHAR(255),
+    middleName VARCHAR(255),
+    lastName VARCHAR(255),
+    ssn VARCHAR(9),
+    dob DATE,
+    currentAddress VARCHAR(255),
+    currentPhoneNo VARCHAR(15),
+    email VARCHAR(255),
+    sex ENUM('Male', 'Female', 'Other'),
+    departmentID INT,
+    guardianID INT,
+    majorID INT,
+    minorID INT,
+    FOREIGN KEY (departmentID) REFERENCES Department(departmentID),
+    FOREIGN KEY (guardianID) REFERENCES Guardian(guardianID),
+    FOREIGN KEY (majorID) REFERENCES MajorDepartment(majorID),
+    FOREIGN KEY (minorID) REFERENCES MinorDepartment(minorID)
+);
+
+CREATE TABLE Guardian (
+    guardianID INT PRIMARY KEY,
+    firstName VARCHAR(255),
+    middleName VARCHAR(255),
+    lastName VARCHAR(255),
+    address VARCHAR(255),
+    contactNo VARCHAR(15)
+);
+
+
+CREATE TABLE Department (
+    departmentID INT PRIMARY KEY ,
+    departmentName VARCHAR(255),
+    description VARCHAR(255),
+    budget DECIMAL(15, 2),
+    officeNo VARCHAR(50)
+);
+CREATE TABLE MajorDepartment (
+    majorID INT PRIMARY KEY ,
+    departmentName VARCHAR(255),
+    description VARCHAR(255)
+);
+CREATE TABLE MinorDepartment (
+    minorID INT PRIMARY KEY ,
+    departmentName VARCHAR(255),
+    description VARCHAR(255)
+);
+
+
+CREATE TABLE Student_registers_courses (
+    studentID INT,
+    courseID INT,
+    registrationDate DATE,
+    PRIMARY KEY (studentID, courseID),
+    FOREIGN KEY (studentID) REFERENCES Student(studentID),
+    FOREIGN KEY (courseID) REFERENCES Course(courseID)
+);
+CREATE TABLE Course (
+    courseID INT PRIMARY KEY,
+    courseName VARCHAR(255),
+    credits INT,
+    hours INT,
+    description VARCHAR(255),
+    departmentID INT,
+    FOREIGN KEY (departmentID) REFERENCES Department(departmentID)
+);
+CREATE TABLE Instructor (
+    instructorID INT PRIMARY KEY ,
+    firstName VARCHAR(255),
+    lastName VARCHAR(255),
+    email VARCHAR(255)
+);
+
+CREATE TABLE Section (
+    sectionID INT PRIMARY KEY,
+    courseID INT,
+    sectionName VARCHAR(255),
+    instructorID INT,
+    FOREIGN KEY (courseID) REFERENCES Course(courseID)
+);
+
+CREATE TABLE Assignment (
+    assignmentID INT PRIMARY KEY ,
+    sectionID INT,
+    description VARCHAR(255),
+    deadlineDate DATE,
+    deadlineTime TIME,
+    possiblePoints INT,
+    FOREIGN KEY (sectionID) REFERENCES Section(sectionID)
+);
+CREATE TABLE Student_submit_assignment (
+    assignmentID INT,
+    studentID INT,
+    evaluationDate DATE,
+    pointsObtained INT,
+    writtenEvaluation TEXT,
+    submissionDate DATE,
+    submissionTime TIME,
+    PRIMARY KEY (assignmentID, studentID),
+    FOREIGN KEY (assignmentID) REFERENCES Assignment(assignmentID),
+    FOREIGN KEY (studentID) REFERENCES Student(studentID)
+);
+CREATE TABLE GradeReport (
+    reportID INT PRIMARY KEY ,
+    studentID INT,
+    courseID INT,
+    attempt TINYINT,
+    letterGrade ENUM('A', 'B', 'C', 'D', 'F'),
+    numericGrade FLOAT,
+    semester VARCHAR(50),
+    year YEAR,
+    FOREIGN KEY (studentID) REFERENCES Student(studentID),
+    FOREIGN KEY (courseID) REFERENCES Course(courseID)
+);
+
+
